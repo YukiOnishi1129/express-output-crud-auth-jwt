@@ -3,7 +3,7 @@ import { Request, Response, NextFunction } from 'express';
 import jwt from 'jsonwebtoken';
 import { sendError } from '@/shared/response/sendResponse';
 
-type AuthRequest = Request & { user?: string | jwt.JwtPayload };
+export type AuthRequest = Request & { user?: string | jwt.JwtPayload };
 
 export const authMiddleware = (
   req: AuthRequest,

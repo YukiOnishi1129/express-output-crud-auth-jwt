@@ -45,6 +45,11 @@ global.beforeAll(async () => {
     `ALTER TABLE \`users\` ADD UNIQUE INDEX \`IDX_97672ac88f789774dd47f7c8be\` (\`email\`)`,
   );
 
+  await dataSource.query(`ALTER TABLE \`todos\` ADD \`user_id\` int NOT NULL`);
+  await dataSource.query(
+    `ALTER TABLE \`todos\` ADD CONSTRAINT \`FK_53511787e1f412d746c4bf223ff\` FOREIGN KEY (\`user_id\`) REFERENCES \`users\`(\`id\`) ON DELETE NO ACTION ON UPDATE NO ACTION`,
+  );
+
   await start();
 }, 30000);
 

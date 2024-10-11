@@ -11,16 +11,25 @@ import { Todo } from '@/domain/entity/todo.entity';
 import { HttpError } from '@/shared/errors/httpError';
 
 export type GetTodoListParam = {
+  userId?: number;
   keyword?: string;
 };
 
-export const getTodoList = async ({ keyword }: GetTodoListParam) => {
+export const getTodoList = async ({ userId, keyword }: GetTodoListParam) => {
   const options: FindManyOptions = {};
+
+  if (userId) {
+    options.where = {
+      userId: userId,
+    };
+  }
   if (keyword) {
     options.where = {
+      ...options.where,
       title: Like(`%${keyword}%`),
     };
   }
+
   return await findAllTodo(options);
 };
 

@@ -1,6 +1,7 @@
 import { RequestHandler } from 'express';
 import { check, validationResult } from 'express-validator';
 
+import { JwtPayload } from 'jsonwebtoken';
 import { sendSuccess, sendError } from '@/shared/response/sendResponse';
 import {
   getTodoList,
@@ -13,6 +14,12 @@ import {
   deleteExistingTodo,
 } from '@/service/todo.service';
 import { HttpError } from '@/shared/errors/httpError';
+import { AuthRequest } from '@/middleware/authMiddleware';
+
+type UserJwtPayload = JwtPayload & {
+  id: number;
+  email: string;
+};
 
 export const validateTodoById = [
   check('id').isInt({ min: 1 }).withMessage('id must be a positive integer'),
@@ -47,6 +54,12 @@ export const getTodoListHandler: RequestHandler = async (req, res) => {
   const { keyword } = req.query;
   if (keyword && typeof keyword === 'string') {
     param.keyword = keyword;
+  }
+
+  const token = (req as AuthRequest).user;
+  if (token && typeof token !== 'string') {
+    const userJwtPayload = token as UserJwtPayload;
+    param.userId = userJwtPayload.id;
   }
 
   try {
