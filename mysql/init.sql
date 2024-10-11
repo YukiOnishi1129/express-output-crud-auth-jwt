@@ -1,3 +1,3 @@
 CREATE DATABASE IF NOT EXISTS EXPRESS_OUTPUT_CRUD_AUTH_JWT_DB;
 
-ALTER USER 'user'@'%' IDENTIFIED WITH caching_sha2_password BY 'pass';
+-- ALTER USER 'user'@'%' IDENTIFIED WITH caching_sha2_password BY 'pass';

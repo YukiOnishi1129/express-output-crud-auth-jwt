@@ -17,10 +17,7 @@ export const AppDataSource = {
         database: process.env.MYSQL_DATABASE,
         entities: ['src/domain/entity/*.ts'],
         migrations: ['src/database/migrations/**/*.ts'],
-        logging: true,
-        synchronize:
-          process.env.NODE_ENV !== 'staging' &&
-          process.env.NODE_ENV !== 'production',
+        logging: false,
       });
     }
     return instance;
