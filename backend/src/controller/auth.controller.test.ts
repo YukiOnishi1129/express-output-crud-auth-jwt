@@ -1,7 +1,7 @@
 import { Request, Response, NextFunction } from 'express';
 import { mockRequest, mockResponse } from 'jest-mock-req-res';
 import bcrypt from 'bcryptjs';
-import { signUpHandler } from './auth.controller';
+import { signInHandler, signUpHandler } from './auth.controller';
 import { AppDataSource } from '@/config/appDataSource';
 import { User } from '@/domain/entity/user.entity';
 import { HttpError } from '@/shared/errors/httpError';
@@ -59,6 +59,82 @@ describe('【Controller Test Auth】', () => {
         expect(error).toEqual(
           new HttpError(409, 'Other user already use this email'),
         );
+      }
+    });
+  });
+
+  describe('【signInHandler】', () => {
+    it('Success: sign in', async () => {
+      const user = {
+        username: 'takeshi',
+        email: 'takeshi@gmail.com',
+        password: 'password',
+      };
+      const hashPassword = await bcrypt.hash(user.password, 10);
+      const userRepo = AppDataSource.getInstance().getRepository(User);
+      await userRepo.save({
+        name: user.username,
+        email: user.email,
+        password: hashPassword,
+      });
+
+      req.body = {
+        email: user.email,
+        password: user.password,
+      };
+      await signInHandler(req, res, next);
+      expect(sendSuccess).toHaveBeenCalledWith(res, 200, expect.any(String));
+    });
+
+    it('Fail: sign in with invalid password', async () => {
+      const user = {
+        username: 'takeshi',
+        email: 'takeshi@gmail.com',
+        password: 'password',
+      };
+      const hashPassword = await bcrypt.hash(user.password, 10);
+      const userRepo = AppDataSource.getInstance().getRepository(User);
+      await userRepo.save({
+        name: user.username,
+        email: user.email,
+        password: hashPassword,
+      });
+
+      req.body = {
+        email: user.email,
+        password: 'invalidPassword',
+      };
+
+      try {
+        await signInHandler(req, res, next);
+      } catch (error) {
+        expect(error).toEqual(new HttpError(401, 'Invalid password'));
+      }
+    });
+
+    it('Fail: sign in with invalid email', async () => {
+      const user = {
+        username: 'takeshi',
+        email: 'takeshi@gmail.com',
+        password: 'password',
+      };
+      const hashPassword = await bcrypt.hash(user.password, 10);
+      const userRepo = AppDataSource.getInstance().getRepository(User);
+      await userRepo.save({
+        name: user.username,
+        email: user.email,
+        password: hashPassword,
+      });
+
+      req.body = {
+        email: 'takesi@gmail.com',
+        password: 'password',
+      };
+
+      try {
+        await signInHandler(req, res, next);
+      } catch (error) {
+        expect(error).toEqual(new HttpError(404, 'User not found'));
       }
     });
   });
