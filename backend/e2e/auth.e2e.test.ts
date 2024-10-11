@@ -81,7 +81,7 @@ describe('【E2E Test Auth API 】', () => {
       const user = {
         username: 'takeshi',
         email: 'tahe@gmail.com',
-        password: 'passwor',
+        password: 'pass',
       };
 
       const response = await request(app).post('/api/auth/signup').send(user);
@@ -218,7 +218,7 @@ describe('【E2E Test Auth API 】', () => {
     it('Fail: validation error password within', async () => {
       const user = {
         email: 'takeshi@gmail.com',
-        password: 'passwor',
+        password: 'pass',
       };
 
       const response = await request(app).post('/api/auth/signin').send(user);
