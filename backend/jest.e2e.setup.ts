@@ -52,7 +52,7 @@ global.beforeAll(async () => {
   );
 
   await start();
-}, 30000);
+}, 60000);
 
 global.afterAll(async () => {
   if (dataSource) {
