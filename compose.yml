@@ -17,6 +17,7 @@ services:
       - MYSQL_PASSWORD=${MYSQL_PASSWORD}
       - MYSQL_ROOT_PASSWORD=${MYSQL_PASSWORD}
       - FRONTEND_BASE_URL=${FRONTEND_BASE_URL}
+      - JWT_SECRET=${JWT_SECRET}
       - TZ=Asia/Tokyo
     depends_on:
       - db
