@@ -153,6 +153,20 @@ describe('【E2E Test Todo API 】', () => {
       expect(received.body.errors[0]).toBe('Not Found');
     });
 
+    it('Fail: Unauthorized', async () => {
+      const expected = {
+        title: 'Test Todo',
+        userId: 1,
+        content: 'This is a test todo item.',
+      };
+      await todoRepo.save(expected);
+      const received = await request(app)
+        .get(`/api/todos/2`)
+        .set('Authorization', `Bearer token`);
+      expect(received.status).toBe(401);
+      expect(received.body.errors[0]).toBe('Unauthorized');
+    });
+
     it('Fail: validation error not integer id', async () => {
       const expected = {
         userId: 1,
@@ -199,6 +213,19 @@ describe('【E2E Test Todo API 】', () => {
 
       expect(received.status).toBe(201);
       expect(received.body).toMatchObject(expected);
+    });
+
+    it('Fail: validation error not title request parameter', async () => {
+      const expected = {
+        content: 'This is a new todo.',
+      };
+
+      const received = await request(app)
+        .post('/api/todos')
+        .send(expected)
+        .set('Authorization', `Bearer token`);
+      expect(received.status).toBe(401);
+      expect(received.body.errors[0]).toBe('Unauthorized');
     });
 
     it('Fail: validation error not title request parameter', async () => {

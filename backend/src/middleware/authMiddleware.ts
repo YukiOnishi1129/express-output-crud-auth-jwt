@@ -21,6 +21,6 @@ export const authMiddleware = (
     req.user = verified;
     next();
   } catch (error) {
-    sendError(res, 400, [`Invalid Token: ${error}`]);
+    sendError(res, 401, [`Invalid Token: ${error}`]);
   }
 };
