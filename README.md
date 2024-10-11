@@ -187,14 +187,3 @@ npm run test
 ```
 npm run test:e2e
 ```
-
-## フロントエンドとの繋ぎ込みの確認
-
-```
-cd frontend
-
-npm run dev
-
-```
-
-- http://localhost:5173 に接続
