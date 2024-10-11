@@ -15,10 +15,15 @@ export class User {
   @Column('varchar', { length: 50, nullable: false })
   public name!: string;
 
-  @Column('varchar', { name: 'email', length: '255', nullable: false })
+  @Column('varchar', {
+    name: 'email',
+    length: '255',
+    nullable: false,
+    unique: true,
+  })
   public email!: string;
 
-  @Column('varchar', { name: 'password', select: false, nullable: false })
+  @Column('varchar', { name: 'password', length: '255', nullable: false })
   public password!: string;
 
   @CreateDateColumn({ name: 'created_at' })

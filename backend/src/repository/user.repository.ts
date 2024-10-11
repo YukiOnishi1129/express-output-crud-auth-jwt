@@ -1,3 +1,4 @@
+import { FindOneOptions } from 'typeorm';
 import { AppDataSource } from '@/config/appDataSource';
 import { HttpError } from '@/shared/errors/httpError';
 import { User } from '@/domain/entity/user.entity';
@@ -11,6 +12,17 @@ export const findById = async (id: number) => {
         id,
       },
     });
+  } catch (error) {
+    console.error(error);
+    throw new HttpError(500, `Failed to find user: ${error}`);
+  }
+};
+
+export const findOne = async (option: FindOneOptions) => {
+  const db = AppDataSource.getInstance();
+  const userRepository = db.getRepository(User);
+  try {
+    return await userRepository.findOne(option);
   } catch (error) {
     console.error(error);
     throw new HttpError(500, `Failed to find user: ${error}`);
