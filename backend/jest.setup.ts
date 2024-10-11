@@ -26,6 +26,7 @@ global.beforeAll(async () => {
   process.env.MYSQL_USER = username;
   process.env.MYSQL_PASSWORD = password;
   process.env.MYSQL_DATABASE = dbName;
+  process.env.JWT_SECRET = 'test_secret';
 
   // データソースを初期化
   dataSource = await AppDataSource.initialize();
