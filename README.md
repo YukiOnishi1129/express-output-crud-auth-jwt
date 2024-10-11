@@ -2,7 +2,7 @@
 
 express サンプル API
 
-ログイン機能付きの CRUD 処理と以下の機能を実装
+ログイン(jwt)機能付きの CRUD 処理と以下の機能を実装
 
 - 静的解析
 - 単体テスト
@@ -23,15 +23,22 @@ express サンプル API
 - API の接続確認は postman を用いて確認してみてください。
 - https://www.postman.com/
 
+### ユーザー認証
+
+|          | メソッド | URI              | 権限 |
+| :------- | :------- | :--------------- | :--- |
+| ログイン | POST     | /api/auth/signin | なし |
+| 会員登録 | POST     | /api/auth/signup | なし |
+
 ### Todo
 
-|                                             | メソッド | URI            |
-| :------------------------------------------ | :------- | :------------- |
-| 全 Todo データを取得                        | GET      | /api/todos     |
-| Todo の ID に紐づく単一の Todo データを取得 | GET      | /api/todos/:id |
-| Todo 新規作成                               | POST     | /api/todos     |
-| Todo 更新                                   | PUT      | /api/todos/:id |
-| Todo 削除                                   | DELETE   | /api/todos/:id |
+|                                             | メソッド | URI            | 権限   |
+| :------------------------------------------ | :------- | :------------- | :----- |
+| 全 Todo データを取得                        | GET      | /api/todos     | 認証済 |
+| Todo の ID に紐づく単一の Todo データを取得 | GET      | /api/todos/:id | 認証済 |
+| Todo 新規作成                               | POST     | /api/todos     | 認証済 |
+| Todo 更新                                   | PUT      | /api/todos/:id | 認証済 |
+| Todo 削除                                   | DELETE   | /api/todos/:id | 認証済 |
 
 ## 環境構築
 
@@ -43,6 +50,8 @@ express サンプル API
 ```
 touch .env
 ```
+
+※JWT_SECRET のみ任意の文字列を記載してください。(これがないとログイン関連の機能が動きません)
 
 - backend ディレクトリに移動し、「.env」ファイルを作成
 - backend/.env.sample」ファイルの記述をコピー
