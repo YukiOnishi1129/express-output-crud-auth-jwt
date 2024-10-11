@@ -1,0 +1,43 @@
+services:
+  backend:
+    container_name: ${BACKEND_CONTAINER_NAME}
+    build:
+      context: .
+      dockerfile: ./backend/Dockerfile
+    volumes:
+      - ./backend:/backend
+      - /etc/localtime:/etc/localtime:ro
+    ports:
+      - ${BACKEND_PORT}:${BACKEND_CONTAINER_PORT}
+    environment:
+      - PORT=${BACKEND_CONTAINER_PORT}
+      - MYSQL_CONTAINER_NAME=${MYSQL_CONTAINER_NAME}
+      - MYSQL_DATABASE=${MYSQL_DATABASE}
+      - MYSQL_USER=${MYSQL_USER}
+      - MYSQL_PASSWORD=${MYSQL_PASSWORD}
+      - MYSQL_ROOT_PASSWORD=${MYSQL_PASSWORD}
+      - FRONTEND_BASE_URL=${FRONTEND_BASE_URL}
+      - TZ=Asia/Tokyo
+    depends_on:
+      - db
+
+  db:
+    container_name: ${MYSQL_CONTAINER_NAME}
+    environment:
+      - MYSQL_DATABASE=${MYSQL_DATABASE}
+      - MYSQL_USER=${MYSQL_USER}
+      - MYSQL_PASSWORD=${MYSQL_PASSWORD}
+      - MYSQL_ROOT_PASSWORD=${MYSQL_PASSWORD}
+      - MYSQL_DEFAULT_AUTHENTICATION_PLUGIN=caching_sha2_password
+      - "TZ=Asia/Tokyo"
+    image: mysql:8.0
+    command: mysqld --character-set-server=utf8 --collation-server=utf8_unicode_ci
+    volumes:
+      - express_output_crud_data:/var/lib/mysql
+      - ./mysql/mysql.cnf:/etc/mysql/conf.d/mysql.cnf
+      - ./mysql:/docker-entrypoint-initdb.d
+    ports:
+      - ${MYSQL_PORT}:${MYSQL_CONTAINER_PORT}
+
+volumes:
+  express_output_crud_data:
