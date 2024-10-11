@@ -278,6 +278,7 @@ describe('【Controller Test Todo】 ', () => {
       req.params = { id: '1' };
       const authReq = req as AuthRequest;
       authReq.user = { id: 1, email: 'takeshi@gmail.com' };
+
       await deleteTodoHandler(authReq, res, next);
 
       expect(sendError).toHaveBeenCalledWith(res, 404, ['Todo not found']);
