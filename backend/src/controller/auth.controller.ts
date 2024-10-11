@@ -13,8 +13,8 @@ export const validateSignUp = [
   check('username')
     .notEmpty()
     .withMessage('username must not be empty')
-    .isLength({ min: 3, max: 20 })
-    .withMessage('username must be between 3 and 20 characters'),
+    .isLength({ max: 20 })
+    .withMessage('username must not exceed 20 characters'),
   check('email')
     .notEmpty()
     .withMessage('email must not be empty')

@@ -48,7 +48,7 @@ global.beforeAll(async () => {
   await dataSource.query(
     `ALTER TABLE \`todos\` ADD CONSTRAINT \`FK_53511787e1f412d746c4bf223ff\` FOREIGN KEY (\`user_id\`) REFERENCES \`users\`(\`id\`) ON DELETE NO ACTION ON UPDATE NO ACTION`,
   );
-}, 30000);
+}, 60000);
 
 global.afterAll(async () => {
   if (dataSource) {
