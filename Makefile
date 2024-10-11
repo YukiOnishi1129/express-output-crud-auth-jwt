@@ -16,4 +16,4 @@ dcdv:
 # コンテナログイン
 ## DB コンテナログイン
 db-sh:
-	docker exec -it mysql-output-crud-db sh
+	docker exec -it mysql-output-crud-auth-jwt-db sh

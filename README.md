@@ -1,8 +1,8 @@
-# express-output-crud
+# express-output-crud-auth-jwt
 
 express サンプル API
 
-CRUD 処理と以下の機能を実装
+ログイン機能付きの CRUD 処理と以下の機能を実装
 
 - 静的解析
 - 単体テスト
@@ -100,8 +100,8 @@ mysql -u root -p
 
 <!-- データベースを選択 -->
 use DATABASE_NAME;
-<!-- 例: デフォルトだとEXPRESS_OUTPUT_CRUD_DB -->
-use EXPRESS_OUTPUT_CRUD_DB;
+<!-- 例: デフォルトだとEXPRESS_OUTPUT_CRUD_AUTH_JWT_DB -->
+use EXPRESS_OUTPUT_CRUD_AUTH_JWT_DB;
 
 <!-- テーブルを閲覧 -->
 show tables;

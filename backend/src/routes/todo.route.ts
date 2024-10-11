@@ -11,13 +11,19 @@ import {
   updateTodoHandler,
   deleteTodoHandler,
 } from '@/controller/todo.controller';
+import { authMiddleware } from '@/middleware/authMiddleware';
 
 const todoRouter = Router();
 
-todoRouter.get('/', getTodoListHandler);
-todoRouter.get('/:id', validateTodoById, getTodoByIdHandler);
-todoRouter.post('/', validateCreateTodo, createNewTodoHandler);
-todoRouter.put('/:id', validateUpdateTodo, updateTodoHandler);
-todoRouter.delete('/:id', validateDeleteTodo, deleteTodoHandler);
+todoRouter.get('/', authMiddleware, getTodoListHandler);
+todoRouter.get('/:id', authMiddleware, validateTodoById, getTodoByIdHandler);
+todoRouter.post('/', authMiddleware, validateCreateTodo, createNewTodoHandler);
+todoRouter.put('/:id', authMiddleware, validateUpdateTodo, updateTodoHandler);
+todoRouter.delete(
+  '/:id',
+  authMiddleware,
+  validateDeleteTodo,
+  deleteTodoHandler,
+);
 
 export default todoRouter;

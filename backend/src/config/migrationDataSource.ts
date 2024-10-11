@@ -13,5 +13,5 @@ export const MigrationDataSource = new DataSource({
   entities: ['src/domain/entity/*.ts'],
   migrations: ['src/database/migrations/**/*.ts'],
   logging: true,
-  synchronize: true,
+  // synchronize: true,
 });
