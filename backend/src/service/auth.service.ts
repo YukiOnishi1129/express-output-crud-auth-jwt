@@ -1,7 +1,7 @@
 import bcrypt from 'bcryptjs';
 import jwt from 'jsonwebtoken';
 import { User } from '@/domain/entity/user.entity';
-import { createUser, findOne } from '@/repository/user.repository';
+import { createUser, findUserOne } from '@/repository/user.repository';
 import { HttpError } from '@/shared/errors/httpError';
 
 export type SignUpParam = {
@@ -11,7 +11,7 @@ export type SignUpParam = {
 };
 
 export const signUp = async ({ username, email, password }: SignUpParam) => {
-  const existUser = await findOne({
+  const existUser = await findUserOne({
     where: {
       email,
     },
@@ -45,7 +45,7 @@ export type SignInParam = {
 };
 
 export const signIn = async ({ email, password }: SignInParam) => {
-  const user = await findOne({
+  const user = await findUserOne({
     where: {
       email,
     },

@@ -6,6 +6,7 @@ import {
   createTodo,
   updateTodo,
   deleteTodo,
+  findTodoOne,
 } from '@/repository/todo.repository';
 import { Todo } from '@/domain/entity/todo.entity';
 import { HttpError } from '@/shared/errors/httpError';
@@ -33,8 +34,26 @@ export const getTodoList = async ({ userId, keyword }: GetTodoListParam) => {
   return await findAllTodo(options);
 };
 
-export const getTodoById = async (id: number) => {
-  const todo = await findTodoById(id);
+export type GetTodoByIdParam = {
+  id: number;
+  userId?: number;
+};
+
+export const getTodoById = async ({ id, userId }: GetTodoByIdParam) => {
+  const options: FindManyOptions<Todo> = {
+    where: {
+      id,
+    },
+  };
+
+  if (userId) {
+    options.where = {
+      ...options.where,
+      userId,
+    };
+  }
+
+  const todo = await findTodoOne(options);
   if (!todo) {
     throw new HttpError(404, 'Todo not found');
   }

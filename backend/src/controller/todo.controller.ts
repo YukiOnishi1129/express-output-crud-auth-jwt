@@ -12,6 +12,7 @@ import {
   updateExistingTodo,
   UpdateExistingTodoParam,
   deleteExistingTodo,
+  GetTodoByIdParam,
 } from '@/service/todo.service';
 import { HttpError } from '@/shared/errors/httpError';
 import { AuthRequest } from '@/middleware/authMiddleware';
@@ -82,8 +83,19 @@ export const getTodoByIdHandler: RequestHandler = async (req, res) => {
     sendError(res, 400, errorMessage);
     return;
   }
+
+  const param: GetTodoByIdParam = {
+    id: Number(req.params.id),
+  };
+
+  const token = (req as AuthRequest).user;
+  if (token && typeof token !== 'string') {
+    const userJwtPayload = token as UserJwtPayload;
+    param.userId = userJwtPayload.id;
+  }
+
   try {
-    const todo = await getTodoById(Number(req.params.id));
+    const todo = await getTodoById(param);
     sendSuccess(res, 200, todo);
   } catch (error) {
     console.error(error);

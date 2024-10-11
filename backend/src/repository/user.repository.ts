@@ -18,7 +18,7 @@ export const findById = async (id: number) => {
   }
 };
 
-export const findOne = async (option: FindOneOptions) => {
+export const findUserOne = async (option: FindOneOptions) => {
   const db = AppDataSource.getInstance();
   const userRepository = db.getRepository(User);
   try {

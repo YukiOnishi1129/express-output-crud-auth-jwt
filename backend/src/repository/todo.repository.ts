@@ -1,4 +1,4 @@
-import { FindManyOptions } from 'typeorm';
+import { FindManyOptions, FindOneOptions } from 'typeorm';
 import { AppDataSource } from '@/config/appDataSource';
 import { Todo } from '@/domain/entity/todo.entity';
 import { HttpError } from '@/shared/errors/httpError';
@@ -23,6 +23,17 @@ export const findTodoById = async (id: number) => {
         id,
       },
     });
+  } catch (error) {
+    console.error(error);
+    throw new HttpError(500, `Failed to find todo: ${error}`);
+  }
+};
+
+export const findTodoOne = async (option: FindOneOptions) => {
+  const db = AppDataSource.getInstance();
+  const todoRepository = db.getRepository(Todo);
+  try {
+    return await todoRepository.findOne(option);
   } catch (error) {
     console.error(error);
     throw new HttpError(500, `Failed to find todo: ${error}`);
