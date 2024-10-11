@@ -2,7 +2,6 @@ import { FindManyOptions, Like } from 'typeorm';
 
 import {
   findAllTodo,
-  findTodoById,
   createTodo,
   updateTodo,
   deleteTodo,
@@ -61,29 +60,53 @@ export const getTodoById = async ({ id, userId }: GetTodoByIdParam) => {
 };
 
 export type CreateNewTodoParam = {
+  userId?: number;
   title: string;
   content: string;
 };
 
-export const createNewTodo = async ({ title, content }: CreateNewTodoParam) => {
+export const createNewTodo = async ({
+  userId,
+  title,
+  content,
+}: CreateNewTodoParam) => {
+  if (!userId) {
+    new HttpError(400, 'User not found');
+    return;
+  }
   const newTodo = new Todo();
   newTodo.title = title;
   newTodo.content = content;
+  newTodo.userId = userId;
   return await createTodo(newTodo);
 };
 
 export type UpdateExistingTodoParam = {
   id: number;
+  userId?: number;
   title: string;
   content: string;
 };
 
 export const updateExistingTodo = async ({
   id,
+  userId,
   title,
   content,
 }: UpdateExistingTodoParam) => {
-  const todo = await findTodoById(id);
+  const options: FindManyOptions<Todo> = {
+    where: {
+      id,
+    },
+  };
+
+  if (userId) {
+    options.where = {
+      ...options.where,
+      userId,
+    };
+  }
+  const todo = await findTodoOne(options);
   if (!todo) {
     throw new HttpError(404, 'Todo not found');
   }
@@ -92,8 +115,28 @@ export const updateExistingTodo = async ({
   return await updateTodo(todo);
 };
 
-export const deleteExistingTodo = async (id: number) => {
-  const todo = await findTodoById(id);
+export type DeleteExistingTodoParam = {
+  id: number;
+  userId?: number;
+};
+
+export const deleteExistingTodo = async ({
+  id,
+  userId,
+}: DeleteExistingTodoParam) => {
+  const options: FindManyOptions<Todo> = {
+    where: {
+      id,
+    },
+  };
+
+  if (userId) {
+    options.where = {
+      ...options.where,
+      userId,
+    };
+  }
+  const todo = await findTodoOne(options);
   if (!todo) {
     throw new HttpError(404, 'Todo not found');
   }

@@ -13,6 +13,7 @@ import {
   UpdateExistingTodoParam,
   deleteExistingTodo,
   GetTodoByIdParam,
+  DeleteExistingTodoParam,
 } from '@/service/todo.service';
 import { HttpError } from '@/shared/errors/httpError';
 import { AuthRequest } from '@/middleware/authMiddleware';
@@ -119,6 +120,12 @@ export const createNewTodoHandler: RequestHandler = async (req, res) => {
     content: req.body.content,
   };
 
+  const token = (req as AuthRequest).user;
+  if (token && typeof token !== 'string') {
+    const userJwtPayload = token as UserJwtPayload;
+    param.userId = userJwtPayload.id;
+  }
+
   try {
     const todo = await createNewTodo(param);
     sendSuccess(res, 201, todo);
@@ -145,6 +152,12 @@ export const updateTodoHandler: RequestHandler = async (req, res) => {
     content: req.body.content,
   };
 
+  const token = (req as AuthRequest).user;
+  if (token && typeof token !== 'string') {
+    const userJwtPayload = token as UserJwtPayload;
+    param.userId = userJwtPayload.id;
+  }
+
   try {
     const todo = await updateExistingTodo(param);
     sendSuccess(res, 200, todo);
@@ -165,8 +178,18 @@ export const deleteTodoHandler: RequestHandler = async (req, res) => {
     sendError(res, 400, errorMessage);
     return;
   }
+
+  const param: DeleteExistingTodoParam = {
+    id: Number(req.params.id),
+  };
+
+  const token = (req as AuthRequest).user;
+  if (token && typeof token !== 'string') {
+    const userJwtPayload = token as UserJwtPayload;
+    param.userId = userJwtPayload.id;
+  }
   try {
-    await deleteExistingTodo(Number(req.params.id));
+    await deleteExistingTodo(param);
     sendSuccess(res, 204);
   } catch (error) {
     console.error(error);
