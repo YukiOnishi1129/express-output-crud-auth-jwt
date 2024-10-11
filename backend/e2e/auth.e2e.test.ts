@@ -119,4 +119,126 @@ describe('【E2E Test Auth API 】', () => {
       );
     });
   });
+
+  describe('POST /api/auth/signin', () => {
+    it('Success: sign in', async () => {
+      const user = {
+        username: 'takeshi',
+        email: 'takeshi@gmail.com',
+        password: 'password',
+      };
+      const hashPassword = await bcrypt.hash(user.password, 10);
+      userRepo = AppDataSource.getInstance().getRepository(User);
+      await userRepo.save({
+        name: user.username,
+        email: user.email,
+        password: hashPassword,
+      });
+
+      const response = await request(app).post('/api/auth/signin').send({
+        email: user.email,
+        password: user.password,
+      });
+      expect(response.status).toBe(200);
+    });
+
+    it('Fail: sign in with invalid password', async () => {
+      const user = {
+        username: 'takeshi',
+        email: 'takeshi@gmail.com',
+        password: 'password',
+      };
+      const hashPassword = await bcrypt.hash(user.password, 10);
+      userRepo = AppDataSource.getInstance().getRepository(User);
+      await userRepo.save({
+        name: user.username,
+        email: user.email,
+        password: hashPassword,
+      });
+
+      const response = await request(app).post('/api/auth/signin').send({
+        email: user.email,
+        password: 'invalidPassword',
+      });
+      expect(response.status).toBe(401);
+      expect(response.body.errors[0]).toBe('Unauthorized');
+    });
+
+    it('Fail: sign in with invalid email', async () => {
+      const user = {
+        username: 'takeshi',
+        email: 'takeshi@gmail.com',
+        password: 'password',
+      };
+      const hashPassword = await bcrypt.hash(user.password, 10);
+      userRepo = AppDataSource.getInstance().getRepository(User);
+      await userRepo.save({
+        name: user.username,
+        email: user.email,
+        password: hashPassword,
+      });
+
+      const response = await request(app).post('/api/auth/signin').send({
+        email: 'yukeru@gmail.com',
+        password: 'password',
+      });
+
+      expect(response.status).toBe(404);
+      expect(response.body.errors[0]).toBe('Not Found');
+    });
+
+    it('Fail: validation error empty parameter', async () => {
+      const user = {
+        email: '',
+        password: '',
+      };
+
+      const response = await request(app).post('/api/auth/signin').send(user);
+      expect(response.status).toBe(400);
+      expect(response.body.errors[0]).toBe('email must not be empty');
+      expect(response.body.errors[1]).toBe(
+        'email must be a valid email address',
+      );
+      expect(response.body.errors[2]).toBe('password must not be empty');
+    });
+
+    it('Fail: validation error not email form', async () => {
+      const user = {
+        email: 'tahe',
+        password: 'password',
+      };
+
+      const response = await request(app).post('/api/auth/signin').send(user);
+      expect(response.status).toBe(400);
+      expect(response.body.errors[0]).toBe(
+        'email must be a valid email address',
+      );
+    });
+
+    it('Fail: validation error password within', async () => {
+      const user = {
+        email: 'takeshi@gmail.com',
+        password: 'passwor',
+      };
+
+      const response = await request(app).post('/api/auth/signin').send(user);
+      expect(response.status).toBe(400);
+      expect(response.body.errors[0]).toBe(
+        'password must be between 8 and 20 characters',
+      );
+    });
+
+    it('Fail: validation error password over', async () => {
+      const user = {
+        email: 'takeshi@gmail.com',
+        password: 'passwordpasswordpassword',
+      };
+
+      const response = await request(app).post('/api/auth/signin').send(user);
+      expect(response.status).toBe(400);
+      expect(response.body.errors[0]).toBe(
+        'password must be between 8 and 20 characters',
+      );
+    });
+  });
 });
