@@ -1,3 +1,8 @@
+/**
+ * Unitテスト実行時のセッツアップ処理(e2eテスト実行時はjest.e2e.setup.tsが実行される)
+ * → jest.config.tsで指定しているjest.setup.tsが実行される
+ */
+
 import { GenericContainer, StartedTestContainer } from 'testcontainers';
 import { DataSource } from 'typeorm';
 import { AppDataSource } from './src/config/appDataSource';

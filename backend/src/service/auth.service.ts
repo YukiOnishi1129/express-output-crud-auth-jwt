@@ -11,6 +11,7 @@ export type SignUpParam = {
 };
 
 export const signUp = async ({ username, email, password }: SignUpParam) => {
+  //  既存ユーザーの存在チェック
   const existUser = await findUserOne({
     where: {
       email,
@@ -20,6 +21,7 @@ export const signUp = async ({ username, email, password }: SignUpParam) => {
     throw new HttpError(409, 'Other user already use this email');
   }
 
+  //  パスワードハッシュ化
   const hashedPassword = await bcrypt.hash(password, 10);
 
   const user = new User();
@@ -45,6 +47,7 @@ export type SignInParam = {
 };
 
 export const signIn = async ({ email, password }: SignInParam) => {
+  //  ユーザー検索
   const user = await findUserOne({
     where: {
       email,
@@ -54,6 +57,7 @@ export const signIn = async ({ email, password }: SignInParam) => {
     throw new HttpError(404, 'User not found');
   }
 
+  // パスワードチェック
   const validPassword = await bcrypt.compare(password, user.password);
   if (!validPassword) {
     throw new HttpError(401, 'Invalid password');

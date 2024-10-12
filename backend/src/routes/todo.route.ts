@@ -1,3 +1,7 @@
+/**
+ * Todo関係のルーティングをまとめて定義
+ */
+
 import { Router } from 'express';
 
 import {
@@ -15,6 +19,8 @@ import { authMiddleware } from '@/middleware/authMiddleware';
 
 const todoRouter = Router();
 
+// ルーティング設定時にバリデーションを設定: validateTodoById など
+// ルーティング設定時に認証ミドルウェアを設定: authMiddleware
 todoRouter.get('/', authMiddleware, getTodoListHandler);
 todoRouter.get('/:id', authMiddleware, validateTodoById, getTodoByIdHandler);
 todoRouter.post('/', authMiddleware, validateCreateTodo, createNewTodoHandler);

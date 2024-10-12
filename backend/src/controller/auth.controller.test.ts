@@ -22,6 +22,7 @@ describe('【Controller Test Auth】', () => {
   });
 
   afterEach(async () => {
+    // テスト後にデータを削除
     const userRepo = AppDataSource.getInstance().getRepository(User);
     await userRepo.delete({});
   });

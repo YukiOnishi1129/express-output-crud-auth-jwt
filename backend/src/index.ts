@@ -22,10 +22,13 @@ export const start = async () => {
     allowedHeaders: ['Content-Type', 'Authorization'], // 許可したいヘッダー
   };
 
+  // CORS設定
   app.use(cors(corsOptions));
   app.use(express.json());
 
+  // データソースの初期化
   AppDataSource.initialize()
+    // データソースの初期化が成功したらサーバー起動
     .then(() => {
       // ルーティング設定
       app.use(API_BASE_URL, apiRouter);
@@ -38,6 +41,7 @@ export const start = async () => {
         });
       }
     })
+    // データソースの初期化に失敗した場合はエラーを出力
     .catch((error) => {
       console.error('Error during Data Source initialization:', error);
     });

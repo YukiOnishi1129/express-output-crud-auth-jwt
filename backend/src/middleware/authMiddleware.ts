@@ -1,4 +1,9 @@
-// src/middleware/authMiddleware.ts
+/**
+ * 認証ミドルウェア
+ * フロントから送られてきたトークンを検証し、
+ * 正しい場合はリクエストオブジェクトにユーザー情報を追加する
+ * 不正な場合はエラーレスポンスを返す (401エラー)
+ */
 import { Request, Response, NextFunction } from 'express';
 import jwt from 'jsonwebtoken';
 import { sendError } from '@/shared/response/sendResponse';

@@ -19,7 +19,6 @@ export const errorHandler = (
     sendError(res, err.statusCode, [err.message]);
     return;
   }
-  // console.log(next);
   // その他の予期しないエラー
   console.error('Unexpected error:', err);
   sendError(res, 500);

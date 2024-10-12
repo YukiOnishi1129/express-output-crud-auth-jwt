@@ -50,6 +50,12 @@ export const validateDeleteTodo = [
   check('id').isInt({ min: 1 }).withMessage('id must be a positive integer'),
 ];
 
+/**
+ * Todoリスト取得処理
+ * @param req
+ * @param res
+ * @returns
+ */
 export const getTodoListHandler: RequestHandler = async (req, res) => {
   const param: GetTodoListParam = {};
 
@@ -58,6 +64,9 @@ export const getTodoListHandler: RequestHandler = async (req, res) => {
     param.keyword = keyword;
   }
 
+  // ユーザー情報を取得
+  // authMiddleware で設定した user が存在する場合は、
+  // ユーザーIDを取得してパラメータに追加
   const token = (req as AuthRequest).user;
   if (token && typeof token !== 'string') {
     const userJwtPayload = token as UserJwtPayload;
@@ -77,7 +86,14 @@ export const getTodoListHandler: RequestHandler = async (req, res) => {
   }
 };
 
+/**
+ * Todo取得処理
+ * @param req
+ * @param res
+ * @returns
+ */
 export const getTodoByIdHandler: RequestHandler = async (req, res) => {
+  // バリデーションチェック
   const errors = validationResult(req);
   if (!errors.isEmpty()) {
     const errorMessage = errors.array().map((error) => error.msg as string);
@@ -89,6 +105,9 @@ export const getTodoByIdHandler: RequestHandler = async (req, res) => {
     id: Number(req.params.id),
   };
 
+  // ユーザー情報を取得
+  // authMiddleware で設定した user が存在する場合は、
+  // ユーザーIDを取得してパラメータに追加
   const token = (req as AuthRequest).user;
   if (token && typeof token !== 'string') {
     const userJwtPayload = token as UserJwtPayload;
@@ -108,7 +127,14 @@ export const getTodoByIdHandler: RequestHandler = async (req, res) => {
   }
 };
 
+/**
+ * Todo新規作成処理
+ * @param req
+ * @param res
+ * @returns
+ */
 export const createNewTodoHandler: RequestHandler = async (req, res) => {
+  // バリデーションチェック
   const errors = validationResult(req);
   if (!errors.isEmpty()) {
     const errorMessage = errors.array().map((error) => error.msg as string);
@@ -120,6 +146,9 @@ export const createNewTodoHandler: RequestHandler = async (req, res) => {
     content: req.body.content,
   };
 
+  // ユーザー情報を取得
+  // authMiddleware で設定した user が存在する場合は、
+  // ユーザーIDを取得してパラメータに追加
   const token = (req as AuthRequest).user;
   if (token && typeof token !== 'string') {
     const userJwtPayload = token as UserJwtPayload;
@@ -139,7 +168,14 @@ export const createNewTodoHandler: RequestHandler = async (req, res) => {
   }
 };
 
+/**
+ * Todo更新処理
+ * @param req
+ * @param res
+ * @returns
+ */
 export const updateTodoHandler: RequestHandler = async (req, res) => {
+  // バリデーションチェック
   const errors = validationResult(req);
   if (!errors.isEmpty()) {
     const errorMessage = errors.array().map((error) => error.msg as string);
@@ -152,6 +188,9 @@ export const updateTodoHandler: RequestHandler = async (req, res) => {
     content: req.body.content,
   };
 
+  // ユーザー情報を取得
+  // authMiddleware で設定した user が存在する場合は、
+  // ユーザーIDを取得してパラメータに追加
   const token = (req as AuthRequest).user;
   if (token && typeof token !== 'string') {
     const userJwtPayload = token as UserJwtPayload;
@@ -171,7 +210,14 @@ export const updateTodoHandler: RequestHandler = async (req, res) => {
   }
 };
 
+/**
+ * Todo削除処理
+ * @param req
+ * @param res
+ * @returns
+ */
 export const deleteTodoHandler: RequestHandler = async (req, res) => {
+  //  バリデーションチェック
   const errors = validationResult(req);
   if (!errors.isEmpty()) {
     const errorMessage = errors.array().map((error) => error.msg as string);
@@ -183,6 +229,9 @@ export const deleteTodoHandler: RequestHandler = async (req, res) => {
     id: Number(req.params.id),
   };
 
+  // ユーザー情報を取得
+  // authMiddleware で設定した user が存在する場合は、
+  // ユーザーIDを取得してパラメータに追加
   const token = (req as AuthRequest).user;
   if (token && typeof token !== 'string') {
     const userJwtPayload = token as UserJwtPayload;

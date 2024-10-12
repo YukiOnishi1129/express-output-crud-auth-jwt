@@ -9,6 +9,7 @@ import {
   signUp,
 } from '@/service/auth.service';
 
+// バリデーションルール
 export const validateSignUp = [
   check('username')
     .notEmpty()
@@ -44,7 +45,14 @@ export const validateSignIn = [
     .withMessage('Password must contain only alphanumeric characters'),
 ];
 
+/**
+ * ユーザー登録処理
+ * @param req jwtトークンを返却
+ * @param res
+ * @returns
+ */
 export const signUpHandler: RequestHandler = async (req, res) => {
+  // バリデーションチェック
   const errors = validationResult(req);
   if (!errors.isEmpty()) {
     const errorMessage = errors.array().map((error) => error.msg as string);
@@ -70,7 +78,14 @@ export const signUpHandler: RequestHandler = async (req, res) => {
   }
 };
 
+/**
+ * ログイン処理
+ * @param req jwtトークンを返却
+ * @param res
+ * @returns
+ */
 export const signInHandler: RequestHandler = async (req, res) => {
+  // バリデーションチェック
   const errors = validationResult(req);
   if (!errors.isEmpty()) {
     const errorMessage = errors.array().map((error) => error.msg as string);

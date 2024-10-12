@@ -26,6 +26,7 @@ describe('【Controller Test Todo】 ', () => {
     res = mockResponse();
     next = jest.fn();
     jest.clearAllMocks();
+    // テスト前にテスト用のユーザーデータを作成
     const hashedPassword = await bcrypt.hash('password', 10);
     const userRepo = AppDataSource.getInstance().getRepository(User);
     await userRepo.save({
@@ -42,6 +43,7 @@ describe('【Controller Test Todo】 ', () => {
     });
   });
   afterEach(async () => {
+    // テスト後にデータを削除
     const todoRepo = AppDataSource.getInstance().getRepository(Todo);
     const userRepo = AppDataSource.getInstance().getRepository(User);
     await todoRepo.delete({});

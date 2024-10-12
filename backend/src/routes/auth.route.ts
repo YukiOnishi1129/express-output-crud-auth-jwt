@@ -1,3 +1,6 @@
+/**
+ * 認証関係のルーティングをまとめて定義
+ */
 import { Router } from 'express';
 import {
   signInHandler,
@@ -8,6 +11,7 @@ import {
 
 const authRouter = Router();
 
+// ルーティング設定時にバリデーションを設定
 authRouter.post('/signup', validateSignUp, signUpHandler);
 authRouter.post('/signin', validateSignIn, signInHandler);
 

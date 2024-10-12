@@ -1,3 +1,8 @@
+/**
+ * マイグレーション用のデータソース
+ * API起動時には使用しない
+ */
+
 import * as dotenv from 'dotenv';
 import { DataSource } from 'typeorm';
 
