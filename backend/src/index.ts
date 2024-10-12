@@ -31,6 +31,7 @@ export const start = async () => {
       app.use(API_BASE_URL, apiRouter);
       app.use(errorHandler);
 
+      // テスト実行時にはサーバー起動させない
       if (process.env.NODE_ENV !== 'test') {
         app.listen(port, () => {
           console.log(`Server is running on http://localhost:${port}`);
@@ -42,6 +43,7 @@ export const start = async () => {
     });
 };
 
+// テスト時はサーバーを起動しない
 if (process.env.NODE_ENV !== 'test') {
   start();
 }
